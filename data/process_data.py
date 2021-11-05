@@ -67,6 +67,7 @@ def save_data(df, database_filename):
         None
     
     """
+    
     #   Create SQL engine with specified filename
     engine = create_engine(database_filename)
 
@@ -77,6 +78,18 @@ def save_data(df, database_filename):
 
 
 def main():
+    """
+        Function to run the whole script and manages user arguments specifying files and 
+        database engine name.
+
+        Args: 
+            None
+        
+        Returns:
+            None
+       
+    """
+
     if len(sys.argv) == 4:
 
         messages_filepath, categories_filepath, database_filepath = sys.argv[1:]
