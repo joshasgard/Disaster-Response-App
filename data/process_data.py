@@ -1,5 +1,6 @@
 #   Import libraries
 import sys
+import os
 import pandas as pd
 from sqlalchemy import create_engine
 
@@ -69,13 +70,16 @@ def save_data(df, database_filename):
     """
 
     #   Create SQL engine with database name
-    engine = create_engine('sqlite:///DisasterResponse.db')
+    engine = create_engine('sqlite:///'+database_filename)
+
+    #   extract table name from database name
+    table_name = os.path.basename(database_filename).split('.')[0]
 
     #   Load cleaned data into SQL engine, replacing data in database if defined 
     #   name already exists.
-    df.to_sql(database_filename, engine, index = False, if_exists = 'replace')
+    df.to_sql(table_name, engine, index=False,if_exists='replace')
+    
       
-
 
 def main():
     """ Run the script and handle user arguments.
@@ -99,7 +103,7 @@ def main():
         print('Cleaning data...')
         df = clean_data(df)
         
-        print('Saving data...\n    DATABASE_TABLE: {}'.format(database_filepath))
+        print('Saving data...\n    DATABASE: {}'.format(database_filepath))
         save_data(df, database_filepath)
         
         print('Cleaned data saved to database!')

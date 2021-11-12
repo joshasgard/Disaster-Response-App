@@ -1,5 +1,6 @@
 #   Import libraries and downloads
 import sys
+import os
 import numpy as np
 import pandas as pd
 
@@ -23,9 +24,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import precision_score, recall_score, accuracy_score
 
 #   Import joblib to save model
-import joblib
+import pickle
 
-def load_data(database_table):
+def load_data(database_filename):
     """Function to load cleaned data from app database as dataframe.
     
     Args: 
@@ -37,8 +38,13 @@ def load_data(database_table):
 
     """
     #   load data from database
-    engine = create_engine('sqlite:///../data/DisasterResponse.db') # calls the database engine
-    df = pd.read_sql_table(database_table, engine) 
+    #   Create SQL engine with database name
+    engine = create_engine('sqlite:///'+database_filename)
+
+    #   extract table name from database name
+    table_name = os.path.basename(database_filename).split('.')[0]
+    
+    df = pd.read_sql_table(table_name, engine) 
     
     #   specify messages and classification categories
     X = df['message']
@@ -133,7 +139,7 @@ def save_model(model, model_filepath):
         None
     
     """
-    joblib.dump(model, model_filepath)
+    pickle.dump(model, open(model_filepath, 'wb'))
 
 
 def main():
@@ -147,9 +153,9 @@ def main():
        
     """
     if len(sys.argv) == 3:
-        database_table, model_filepath = sys.argv[1:]
-        print('Loading data...\n    DATABASE: {}'.format(database_table))
-        X, y, category_names = load_data(database_table)
+        database_filename, model_filepath = sys.argv[1:]
+        print('Loading data...\n    DATABASE: {}'.format(database_filename))
+        X, y, category_names = load_data(database_filename)
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
         
         print('Building model...')

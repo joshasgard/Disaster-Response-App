@@ -5,17 +5,29 @@ import joblib
 
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
 
 from flask import Flask
 from flask import render_template, request, jsonify
 from plotly.graph_objs import Bar
 from sqlalchemy import create_engine
 
-
 app = Flask(__name__)
 
 def tokenize(text):
+    """Function converts raw messages into tokens, cleans the tokens and removes
+        stopwords.
+    
+    Args:
+        text(str): raw message data to be classified.
+    Returns:
+        clean_tokens(list): cleaned list of tokens(words).
+        
+    """
+    #   convert each text input into tokens
     tokens = word_tokenize(text)
+
+    #   initialize lemmatizer for converting tokens to root
     lemmatizer = WordNetLemmatizer()
 
     clean_tokens = []
@@ -23,14 +35,17 @@ def tokenize(text):
         clean_tok = lemmatizer.lemmatize(tok).lower().strip()
         clean_tokens.append(clean_tok)
 
+    #   remove stopwords    
+    clean_tokens = [x for x in clean_tokens if x not in stopwords.words('english')]
+
     return clean_tokens
 
 # load data
-engine = create_engine('sqlite:///../data/Disaster_Response.db')
-df = pd.read_sql_table('cleaned_messages', engine)
+engine = create_engine('sqlite:///../data/DisasterResponse.db')
+df = pd.read_sql_table('DisasterResponse', engine)
 
 # load model
-model = joblib.load("../models/model.pkl")
+model = joblib.load("../models/classifier.pkl")
 
 
 # index webpage displays cool visuals and receives user input text for model
@@ -94,7 +109,7 @@ def go():
 
 def main():
     app.run(host='0.0.0.0', port=3001, debug=True)
-
+ 
 
 if __name__ == '__main__':
     main()
