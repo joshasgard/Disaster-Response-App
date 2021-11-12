@@ -68,12 +68,12 @@ def save_data(df, database_filename):
     
     """
 
-    #   Create SQL engine with specified filename
-    engine = create_engine(database_filename)
+    #   Create SQL engine with database name
+    engine = create_engine('sqlite:///DisasterResponse.db')
 
     #   Load cleaned data into SQL engine, replacing data in database if defined 
     #   name already exists.
-    df.to_sql('cleaned_messages', engine, index = False, if_exists = 'replace')
+    df.to_sql(database_filename, engine, index = False, if_exists = 'replace')
       
 
 
@@ -99,7 +99,7 @@ def main():
         print('Cleaning data...')
         df = clean_data(df)
         
-        print('Saving data...\n    DATABASE: {}'.format(database_filepath))
+        print('Saving data...\n    DATABASE_TABLE: {}'.format(database_filepath))
         save_data(df, database_filepath)
         
         print('Cleaned data saved to database!')
@@ -110,7 +110,7 @@ def main():
               'well as the filepath of the database to save the cleaned data '\
               'to as the third argument. \n\nExample: python process_data.py '\
               'disaster_messages.csv disaster_categories.csv '\
-              'DisasterResponse.db')
+              'DisasterResponse')
 
 
 if __name__ == '__main__':

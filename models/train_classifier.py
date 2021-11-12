@@ -25,11 +25,11 @@ from sklearn.metrics import precision_score, recall_score, accuracy_score
 #   Import joblib to save model
 import joblib
 
-def load_data(database_filepath):
+def load_data(database_table):
     """Function to load cleaned data from app database as dataframe.
     
     Args: 
-        database_filepath (str): path to database to load from.
+        database_table (str): saved database table
     Returns:
         X (series):             messages to classify.
         y (dataframe):          dataframe containing message categories.
@@ -37,8 +37,8 @@ def load_data(database_filepath):
 
     """
     #   load data from database
-    engine = create_engine(database_filepath) # calls the database engine
-    df = pd.read_sql_table('clean_data', engine) 
+    engine = create_engine('sqlite:///../data/DisasterResponse.db') # calls the database engine
+    df = pd.read_sql_table(database_table, engine) 
     
     #   specify messages and classification categories
     X = df['message']
@@ -147,9 +147,9 @@ def main():
        
     """
     if len(sys.argv) == 3:
-        database_filepath, model_filepath = sys.argv[1:]
-        print('Loading data...\n    DATABASE: {}'.format(database_filepath))
-        X, y, category_names = load_data(database_filepath)
+        database_table, model_filepath = sys.argv[1:]
+        print('Loading data...\n    DATABASE: {}'.format(database_table))
+        X, y, category_names = load_data(database_table)
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
         
         print('Building model...')
@@ -167,10 +167,10 @@ def main():
         print('Trained model saved!')
 
     else:
-        print('Please provide the filepath of the disaster messages database '\
+        print('Please provide the name of table of the disaster messages database '\
               'as the first argument and the filepath of the pickle file to '\
               'save the model to as the second argument. \n\nExample: python '\
-              'train_classifier.py ../data/DisasterResponse.db classifier.pkl')
+              'train_classifier.py DisasterResponse classifier.pkl')
 
 
 if __name__ == '__main__':
