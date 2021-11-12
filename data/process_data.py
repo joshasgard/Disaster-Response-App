@@ -1,5 +1,5 @@
+#   Import libraries
 import sys
-import numpy as np
 import pandas as pd
 from sqlalchemy import create_engine
 
@@ -24,7 +24,7 @@ def load_data(messages_filepath, categories_filepath):
     
     return df
 
-
+    
 def clean_data(df):
     """Function to transform dataset for use in an ML Pipeline.
        Splits the categories into separate category columns, cleans class values
@@ -67,7 +67,7 @@ def save_data(df, database_filename):
         None
     
     """
-    
+
     #   Create SQL engine with specified filename
     engine = create_engine(database_filename)
 
@@ -78,15 +78,13 @@ def save_data(df, database_filename):
 
 
 def main():
-    """
-        Function to run the whole script and manages user arguments specifying files and 
-        database engine name.
-
-        Args: 
-            None
+    """ Run the script and handle user arguments.
+       
+    Args: 
+        None
         
-        Returns:
-            None
+    Returns:
+        None
        
     """
 
