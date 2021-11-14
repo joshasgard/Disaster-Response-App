@@ -152,6 +152,14 @@ def go():
         classification_result=classification_results
     )
 
+#   web page displays training data visualizations in greater detail
+@app.route('/dataviz')
+def dataviz():
+
+    return render_template(
+        'dataviz.html'
+    )
+
 
 def main():
     app.run(host='0.0.0.0', port=3001, debug=True)
