@@ -191,14 +191,15 @@ def go():
     return render_template(
         'go.html',
         query=query,
-        classification_result=classification_results
-    )
+        classification_result=classification_results)
+
 
 #   web page displays training data visualizations in greater detail
 @app.route('/dataviz')
 def dataviz():
 
     #   Figure 2: performance metric for all categories
+    #   Plot is second element (a dictionary type) in the graphs list. 
 
     #   Figure 3: data showing top 5 message categories in the dataset
     genre_per_category = df.iloc[:,3:].groupby('genre').sum().T
@@ -360,9 +361,7 @@ def dataviz():
     ids = ["graph-{}".format(i) for i, _ in enumerate(graphs)]
     graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
 
-    return render_template(
-        'dataviz.html', ids=ids, graphJSON=graphJSON   
-    )
+    return render_template('dataviz.html', ids=ids, graphJSON=graphJSON   )
 
 
 def main():

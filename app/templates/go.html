@@ -8,13 +8,24 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="text-center">Result</h1>
+    <h1 class="text-center">Your Message Category - who to call for help</h1>
         <ul class="list-group">
             {% for category, classification in classification_result.items() %}
                 {% if classification == 1 %}
-                    <li class="list-group-item list-group-item-success text-center">{{category.replace('_', ' ').title()}}</li>
+                    {% if category in ['related', 'aid_related', 'other_aid','direct_report', 'military','security'] %}
+                        <li class="list-group-item list-group-item-dark text-center">{{category.replace('_', ' ').title()}} - Click to alert the police or call 911 </li>
+                    {% elif category in ['weather_related', 'floods', 'storm', 'earthquake', 'other_weather', 'fire',] %}
+                        <li class="list-group-item list-group-item-primary text-center">{{category.replace('_', ' ').title()}} - Click to alert your local government and local Fire Rescue.</li>
+                    {% elif category in ['food', 'shelter', 'refugees','medical_help', 'water','money','building'] %}
+                        <li class="list-group-item list-group-item-danger text-center">{{category.replace('_', ' ').title()}} - Click to alert nearest hospital or Red Cross. </li>
+                    {% else %}
+                    <li class="list-group-item list-group-item-success text-center">{{category.replace('_', ' ').title()}} - Please direct your request to the appropriate agency suggested.</li>
+                    {% endif %}
                 {% else %}
-                    <li class="list-group-item list-group-item-dark text-center">{{category.replace('_', ' ').title()}}</li>
+                    <!--<li class="list-group-item list-group-item-dark text-center">
+                        {{category.replace('_', ' ').title()}} 
+                      No Issue Identified. Please rephrase your message with specific keywords
+                    </li>-->
                 {% endif %}
             {% endfor %}
 
