@@ -1,17 +1,64 @@
 {% extends "master.html" %}
 {% block title %}Training Data Overview{% endblock %}
 
-{% block message %}
-    <hr />
-    <h4 class="text-center">MESSAGE</h4>
-    <p class="text-center"><i>Nothing is here for now</i></p>
+<!--Jumbotron COntainer for header section-->
+{% block visuals %}
+
+            <!--Jumbotron with container for interacting with model and classification-->   
+            <div class="jumbotron" style="height: 120px;">
+                <div class="container" style="margin-top: -30px;">
+
+                    <h2 class="text-center text-success" style="font-size: 300;">Figure Eight Inc. Training Data Overview</h1>
+                        <p class="text-center text-secondary" style="font-size:large;">Let's have a look at the training data for this model</p>
+                    <hr />
+        
+                </div>
+            </div>
+
 {% endblock %}
 
+<!-- Main Page content-->
 {% block content %}
-    <h1 class="text-center">Visualisations and Charts</h1>
 
+    {%block content_header%}
+  
+        <div class="page-header">
+            <h2 class="text-center">Tables and charts</h2>
+        </div>
+    {% endblock %}
+
+<!--Top section-->
+    <div class = "row"> 
+        <!--charts-->       
+        <div id="charts" class="mt-3" >
+               
+            <div class="row" style="margin-left: 10px; margin-right: 10px;">
+                <!--Data Table: 1-->
+                <div class="col-6">
+                        <h4 class="text-left text-info"">Raw Data</h4>
+                        <img src="../static/img/data_before.PNG" class = "img-fluid" alt="A generic square placeholder.">
+                </div>
+
+                <!--Data Table: 1-->       
+                <div class="col-6">
+                        <h4 class="text-right text-info"">Clean Data</h4>
+                        <h5 class="text-right text-info"">Used to train Model</h4>
+                        <img src="../static/img/data_after.PNG" class = "img-fluid" alt="A generic square placeholder.">
+
+                </div>
+            </div>
 
         </div>
+
     </div>
 
+    <div class = "row"> 
+
+    </div>
+
+    {% for id in ids %}
+    <div id="{{id}}"></div>
+    {% endfor %}
+
 {% endblock %}
+

@@ -9,7 +9,7 @@ from nltk.corpus import stopwords
 
 from flask import Flask
 from flask import render_template, request, jsonify
-from plotly.graph_objs import Bar
+from plotly.graph_objs import Bar, Scatter
 from sqlalchemy import create_engine
 
 app = Flask(__name__)
@@ -43,6 +43,7 @@ def tokenize(text):
 #   load data
 engine = create_engine('sqlite:///../data/DisasterResponse.db')
 df = pd.read_sql_table('DisasterResponse', engine)
+metrics = pd.read_csv("../data/model_metrics.csv")
 
 #   load model
 model = joblib.load("../models/classifier.pkl")
@@ -53,7 +54,14 @@ model = joblib.load("../models/classifier.pkl")
 @app.route('/index')
 def index():
     
-    #   Figure 1: data showing top 5 message categories in the dataset
+    
+    #   Figure 1: performance metric for all categories
+
+
+
+
+  
+    #   Figure 2: data showing top 5 message categories in the dataset
     genre_per_category = df.iloc[:,3:].groupby('genre').sum().T
     top_category = genre_per_category.sum(axis=1).sort_values(ascending=False).reset_index()
     top_category.columns = ['categories', 'true_proportion -1']
@@ -61,13 +69,11 @@ def index():
     top_category['categories'] = top_category['categories'].apply(lambda x: str(x).replace('_', ' '))
     top_classes = top_category.head(5)
 
-    #   Figure 2: data visuals
+    #   Figure 3: data visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
 
-    #   Figure 3: 
-
-    #   create visuals
+    #   Create visuals
     graphs = [
         {
             'data': [
@@ -103,7 +109,40 @@ def index():
                     'title_standoff' : 40, 
                     'tickangle' : 45
                 },
-               # 'template': "seaborn"
+            }
+
+        },
+        {
+            'data':[
+                Scatter(
+                    name = 'Precision',
+                    x = metrics['CLASSES'],
+                    y = metrics['PRECISION'],
+                    mode = 'lines'
+                ),
+                Scatter(
+                    name = 'Recall',
+                    x = metrics['CLASSES'],
+                    y = metrics['RECALL'],
+                    mode = 'lines'
+                ),
+                Scatter(
+                    name = 'Accuracy',
+                    x = metrics['CLASSES'],
+                    y = metrics['ACCURACY'],
+                    mode = 'lines'
+                )
+            ],
+            'layout':{
+                'title': 'RF Model Performance Metrics',
+                "xaxis":{
+                    'title': 'Categories',
+                    'title_standoff': 100,
+                    'tickangle': 45
+                },
+                "yaxis":{
+                     'title': ""
+                }
             }
 
         },
@@ -111,7 +150,10 @@ def index():
             'data': [
                 Bar(
                     x=genre_names,
-                    y=genre_counts
+                    y=genre_counts,
+                    marker=dict(
+                            color='rgba(174, 132, 255, 0.99)',
+                            line=dict(color='rgba(174, 132, 255, 0.99)', width=3))
                 )
             ],
             'layout': {
@@ -156,8 +198,170 @@ def go():
 @app.route('/dataviz')
 def dataviz():
 
+    #   Figure 2: performance metric for all categories
+
+    #   Figure 3: data showing top 5 message categories in the dataset
+    genre_per_category = df.iloc[:,3:].groupby('genre').sum().T
+    top_category = genre_per_category.sum(axis=1).sort_values(ascending=False).reset_index()
+    top_category.columns = ['categories', 'true_proportion -1']
+    top_category['false_proportion -0'] = df.shape[0] - top_category['true_proportion -1']
+    top_category['categories'] = top_category['categories'].apply(lambda x: str(x).replace('_', ' '))
+    top_classes = top_category.head(5)
+
+    #   Figure 4: data visuals
+    genre_counts = df.groupby('genre').count()['message']
+    genre_names = list(genre_counts.index)
+
+    #   Figure 1: Message count in each class per genre - Filters for categories with greater than
+    #             10% (0.1) true values. 
+    class_per_genre = genre_per_category[genre_per_category.sum(axis=1)/df.shape[0]>0.1].reset_index()
+    class_per_genre.columns = ['categories', 'direct', 'news', 'social']
+
+    #   create visuals
+    graphs = [ 
+        {
+            'data': [
+                Bar(
+                    name = 'direct',
+                    x=class_per_genre['categories'],
+                    y=class_per_genre['direct'],
+                    marker=dict(
+                            color='rgba(246, 78, 139, 0.6)',
+                            line=dict(color='rgba(246, 78, 139, 1.0)', width=3))
+                ),
+                Bar(
+                   name = 'news',
+                    x=class_per_genre['categories'],
+                    y=class_per_genre['news'],
+                    marker=dict(
+                            color='rgba(58, 71, 80, 0.6)',
+                            line=dict(color='rgba(58, 71, 80, 1.0)', width=3))
+                ),
+                Bar(
+                   name = 'social',
+                    x=class_per_genre['categories'],
+                    y=class_per_genre['social'],
+                    marker=dict(
+                            color='rgba(174, 132, 255, 0.99)',
+                            line=dict(color='rgba(0,153,153,0.2)', width=3)
+                    )
+                )
+
+                ],
+            'layout':{
+               #'barmode' : 'stack',
+                'title': 'Message count per class per genre',
+                "yaxis": {
+                    'title': 'Number of messages'
+                },
+                "xaxis": {
+                    'title': 'Categories',
+                    'title_standoff' : 40, 
+                    'tickangle' : 45
+                },
+            }
+
+        },
+        {
+            'data':[
+                Scatter(
+                    name = 'Precision',
+                    x = metrics['CLASSES'],
+                    y = metrics['PRECISION'],
+                    mode = 'lines'
+                ),
+                Scatter(
+                    name = 'Recall',
+                    x = metrics['CLASSES'],
+                    y = metrics['RECALL'],
+                    mode = 'lines'
+                ),
+                Scatter(
+                    name = 'Accuracy',
+                    x = metrics['CLASSES'],
+                    y = metrics['ACCURACY'],
+                    mode = 'lines'
+                )
+            ],
+            'layout':{
+                'title': 'RF Model Performance Metrics',
+                "xaxis":{
+                    'title': 'Categories',
+                    'title_standoff': 100,
+                    'tickangle': 45
+                },
+                "yaxis":{
+                     'title': ""
+                }
+            }
+
+        },
+        {
+            'data': [
+                Bar(
+                    name = 'Classified in class',
+                    y=top_classes['categories'],
+                    x=top_classes['true_proportion -1'],
+                    orientation = 'h',
+                    marker=dict(
+                            color='rgba(246, 78, 139, 0.6)',
+                            line=dict(color='rgba(246, 78, 139, 1.0)', width=3))
+                    
+                ),
+                Bar(
+                    name = 'Not classified in class',
+                    y=top_classes['categories'],
+                    x=top_classes['false_proportion -0'],
+                    orientation = 'h',
+                    marker=dict(
+                            color='rgba(58, 71, 80, 0.6)',
+                            line=dict(color='rgba(58, 71, 80, 1.0)', width=3))
+                )
+            ],
+            'layout':{
+                'barmode' : 'stack',
+                'title': 'Top 5 message categories',
+                "xaxis": {
+                    'title': 'Number of messages'
+                },
+                "yaxis": {
+                    'title': 'Categories',
+                    'title_standoff' : 40, 
+                    'tickangle' : 45
+                },
+               # 'template': "seaborn"
+            }
+
+        },
+       {
+            'data': [
+                Bar(
+                    x=genre_names,
+                    y=genre_counts,
+                    marker=dict(
+                            color='rgba(174, 132, 255, 0.99)',
+                            line=dict(color='rgba(174, 132, 255, 0.99)', width=3))
+                )
+            ],
+            'layout': {
+                'title': 'Distribution of Message Genres',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Genre"
+                },
+                'template': "seaborn"
+            }
+        },
+    ]
+    
+    #   encode plotly graphs in JSON
+    ids = ["graph-{}".format(i) for i, _ in enumerate(graphs)]
+    graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
+
     return render_template(
-        'dataviz.html'
+        'dataviz.html', ids=ids, graphJSON=graphJSON   
     )
 
 
