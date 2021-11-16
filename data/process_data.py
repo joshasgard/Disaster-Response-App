@@ -54,7 +54,7 @@ def clean_data(df):
     df = df.drop_duplicates(subset='message')
 
     #   Filter out 'related' category with non-binary class
-    #df = df[df['related']!=2]
+    df = df[df['related']!=2]
 
     return df
 

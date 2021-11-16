@@ -1,14 +1,17 @@
+#   Import data processing packages
 import json
-import plotly
 import pandas as pd
 import joblib
 
+#   Import natural language took kits
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 
+#   Other imports
 from flask import Flask
 from flask import render_template, request, jsonify
+import plotly
 from plotly.graph_objs import Bar, Scatter
 from sqlalchemy import create_engine
 
@@ -62,7 +65,7 @@ def index():
     top_category['categories'] = top_category['categories'].apply(lambda x: str(x).replace('_', ' '))
     top_classes = top_category.head(5)
 
-    #   Figure 2: performance metric for all categories
+    #   Figure 2: a scatter plot of performance metrics for all categories
 
     #   Figure 3: data visuals
     genre_counts = df.groupby('genre').count()['message']
@@ -175,6 +178,7 @@ def index():
 #   web page that handles user query and displays model results
 @app.route('/go')
 def go():
+    
     # save user input in query
     query = request.args.get('query', '') 
 
@@ -193,27 +197,30 @@ def go():
 @app.route('/dataviz')
 def dataviz():
 
-    #   Figure 2: performance metric for all categories
-    #   Plot is second element (a dictionary type) in the graphs list. 
-
-    #   Figure 3: data showing Number of Negative-Positive class per category - top 5
+    #   Group data by message genres
     genre_per_category = df.iloc[:,3:].groupby('genre').sum().T
-    top_category = genre_per_category.sum(axis=1).sort_values(ascending=False).reset_index()
-    top_category.columns = ['categories', 'true_proportion -1']
-    top_category['false_proportion -0'] = df.shape[0] - top_category['true_proportion -1']
-    top_category['categories'] = top_category['categories'].apply(lambda x: str(x).replace('_', ' '))
-    top_classes = top_category.head(5)
-
-    #   Figure 4: data visuals
-    genre_counts = df.groupby('genre').count()['message']
-    genre_names = list(genre_counts.index)
 
     #   Figure 1: Message count in each class per genre - Filters for categories with greater than
     #             10% (0.1) true values. 
     class_per_genre = genre_per_category[genre_per_category.sum(axis=1)/df.shape[0]>0.1].reset_index()
     class_per_genre.columns = ['categories', 'direct', 'news', 'social']
 
-    #   create visuals
+    #   Figure 2: A scatter plot of performance metrics for all categories
+
+    #   Figure 3: Data showing Number of Negative-Positive class per category - top 5
+    top_category = genre_per_category.sum(axis=1).sort_values(ascending=False).reset_index()
+    top_category.columns = ['categories', 'true_proportion -1']
+    top_category['false_proportion -0'] = df.shape[0] - top_category['true_proportion -1']
+    top_category['categories'] = top_category['categories'].apply(lambda x: str(x).replace('_', ' '))
+    top_classes = top_category.head(5)
+
+    #   Figure 4: Data visuals
+    genre_counts = df.groupby('genre').count()['message']
+    genre_names = list(genre_counts.index)
+
+
+
+    #   Create visuals
     graphs = [ 
         {
             'data': [
