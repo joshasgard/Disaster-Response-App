@@ -22,7 +22,7 @@
   </p>
 
 
-# Summary/Introduction 🎯
+# Summary 🎯
 A web app for an ML pipeline trained and deployed to help emergency responders detect public messages (tweets, FB posts, texts, etc.) asking for aid during disasters and emergencies. Victims and witnesses can also use the app to check the relevant agencies to call upon. 
 <p align="center"> 
     <a href="/" target="_blank">
@@ -78,21 +78,20 @@ A web app for an ML pipeline trained and deployed to help emergency responders d
 ```
 
 
-# Use Repo 📢 ✏️
+# Use Repo 📢✏️
 Run the following commands in the project's root directory in your command line to set up your database and model.
 
 ### ETL data to SQLite DB
 * To run ETL pipeline that cleans data and stores in database.
         `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
     
- ### Train Model in ML Pipeline
- * To run ML pipeline that trains classifier and saves.
+### Train Model in ML Pipeline
+* To run ML pipeline that trains classifier and saves.
         `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
- ##### Training Result
- * This returns:  *cmd print out image will be included
+##### Training Result
+* This returns:  *cmd print out image will be included
 
- 
- ### Run web app
+### Run web app
  * Run the following command in the app's directory to run your web app.
          `python run.py` or run with <a href="https://pypi.org/project/Flask/2.0.1/"><img alt="Flask" src="https://img.shields.io/badge/flask-2.0.1-blue" /></a>
 ```
@@ -109,23 +108,22 @@ C:\Desktop\Disaster-Response-App\app> python run.py
      ......
  ```
 
-# Imbalanced Data and Precision or Recall ⚖️ 
+# Imbalanced Data ⚖️
 ### Imbalanced Data
-* The dataset is heavily imbalanced for most of the message categories, particularly important ones like 'water', 'fire', 'missing people', 'death', 'hospital', 'electricity', and 'transport' have very few representation. 
-* Even with **Stratified Sampling** through Grid Search Cross Validation to maintain weights, our model still overfits (i.e. predicts 0 most of the times) for these categories. Hence, we have unreasonably high *weighted recall/accuracies for the classes. 
+* The dataset is heavily imbalanced for most of the message categories, particularly important ones like `'water', 'fire', 'missing people', 'death', 'hospital', 'electricity', and 'transport'` have very few representation. This means the model performs 
+* Even with **Stratified Sampling** through Grid Search Cross Validation to maintain weights, our model still overfits (i.e. predicts 0 most of the times) for these categories. Hence, we have unreasonably high *weighted* precisions and recalls/accuracies for the classes. 
 
-### Precision or Recall
-* Precision, calculated as the true positive rate [TP/(TP + FP)] , 
-* Recall = TP/(TP + FN)
+### Emphasizing Precision and/or Recall
+* Precision, calculated as `TP/(TP + FP)`, is a model metric that punishes classification of messages into a category they do not belong (False Positves, returns 1 instead of 0). The higher the number of misclassifications in that category, the lower the precision value of the model for the category and vice-versa. Recall, calculated as the true positive rate `TP/(TP + FN)`, is a model performance metric that helps to measure the failure of a model to detect messages that belong to a category (False Negatives, returns 0 instead of 1). 
 
+* We have a small positive to negative class ratio for most of the disaster category in the dataset, which supports our interest of detecting relevant messages (positive class) out of a multitude in a disaster. 
+
+* **Hence, for each of the 36 categories, our choice of metric will depend on whether it is more costly for our model to detect some wrong messages (precision) or fail to detect some messages of people that need emergency help (Recall) or both (f1 score). In this case, we can afford to detect some irrelevant messages for most categories, but we can't afford to miss messages of people that need help. Recall is more emphasised**. 
 
 
 # Licence 📃
-
+* None. 
 
 # Credits 🚀
 * Data provided by <a href = https://appen.com/> FigureEight, now appen </a>
 * Project reviewed by <a href = udacity.com> UDACITY </a> Data Science Team
-
-
-
