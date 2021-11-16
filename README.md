@@ -83,11 +83,13 @@ Run the following commands in the project's root directory in your command line 
 
 ### ETL data to SQLite DB
 * To run ETL pipeline that cleans data and stores in database.
-        `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
+
+```python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db```
     
 ### Train Model in ML Pipeline
 * To run ML pipeline that trains classifier and saves.
-        `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
+
+```python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl```
 ##### Training Result
 * This returns:  *cmd print out image will be included
 
