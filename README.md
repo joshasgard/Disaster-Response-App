@@ -25,7 +25,7 @@
 # Summary 🎯
 A web app for an ML pipeline trained and deployed to help emergency responders detect public messages (tweets, FB posts, texts, etc.) asking for aid during disasters and emergencies. Victims and witnesses can also use the app to check the relevant agencies to call upon. 
 <p align="center"> 
-    <a href="/" target="_blank">
+    <a href="https://github.com/joshasgard/Disaster-Response-App/blob/master/models/train_classifier.py" target="_blank">
     <img src="https://github.com/joshasgard/Disaster-Response-App/blob/master/app/static/img/MLOps_pipeline_scaling3.png"></img>
   </a>
   </p>
