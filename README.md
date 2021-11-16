@@ -38,8 +38,9 @@ A web app for an ML pipeline trained and deployed to help emergency responders d
 * The data cleaning process was done in an ETL pipeline. It involves data extraction from `.csv`, merging, and data transformation by string splitting, type casting, duplicate removal and filtering. The clean data is then loaded into an SQlite DB.
 
 ### ML Pipeline
-* The ML pipeline, with a **Random Forest Classifier** as estimator, is fitted to the dataset here. 
+* The ML pipeline, with a **Random Forest Classifier (RF)** as estimator, is fitted to the dataset here. 
 * Our clean messages serve as the predictor variable while the 36 categories are the MultiOutput target from the pipeline. Hyperparameter Tuning using **Grid Search (with Cross Validation)** was carried out to find the hyperparameters giving the optimum model performance. 
+* During the modelling process, a **Naive Bayes Classifier and an AdaBoost Classifier** were also fitted to the dataset. But there is no significant difference in their performance compared to the RF classifier. Hence, we stuck with the latter. 
 * The pipeline dumps the trained model to a pickle file and returns model **Precision, Recall and Accuracy** as performance metrics. 
 
 ### Web App 
@@ -83,15 +84,37 @@ Run the following commands in the project's root directory in your command line 
 
 ### ETL data to SQLite DB
 * To run ETL pipeline that cleans data and stores in database.
-
 ```python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db```
     
 ### Train Model in ML Pipeline
-* To run ML pipeline that trains classifier and saves.
-
+* To run ML pipeline that trains classifier and saves. The training should take a few minutes (about 5 minutes) depending on your machine. 
 ```python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl```
+
 ##### Training Result
-* This returns:  *cmd print out image will be included
+```
+Loading data...
+    DATABASE: data/DisasterResponse.db
+Building model...
+Training model...
+Evaluating model...
+1 - RELATED
+Precision: 0.788, Recall 0.804, Accuracy: 0.804
+2 - REQUEST
+Precision: 0.885, Recall 0.891, Accuracy: 0.891
+3 - OFFER
+Precision: 0.995, Recall 1.0, Accuracy: 0.995
+4 - AID_RELATED
+Precision: 0.77, Recall 0.77, Accuracy: 0.77
+5 - MEDICAL_HELP
+Precision: 0.913, Recall 0.928, Accuracy: 0.928
+.............
+.............
+36 - DIRECT_REPORT
+Precision: 0.853, Recall 0.862, Accuracy: 0.862
+Saving model...
+    MODEL: models/classifier.pkl
+Trained model saved!
+```
 
 ### Run web app
  * Run the following command in the app's directory to run your web app.
