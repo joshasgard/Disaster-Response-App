@@ -50,8 +50,11 @@ def clean_data(df):
     df.drop('categories', axis = 1, inplace=True)
     df = pd.concat([df,categories_table], axis=1)
 
-    #   Remove dupplicates from data
+    #   Remove duplicates from data
     df = df.drop_duplicates(subset='message')
+
+    #   Filter out 'related' category with non-binary class
+    #df = df[df['related']!=2]
 
     return df
 

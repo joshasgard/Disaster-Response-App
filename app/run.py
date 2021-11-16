@@ -54,20 +54,15 @@ model = joblib.load("../models/classifier.pkl")
 @app.route('/index')
 def index():
     
-    
-    #   Figure 1: performance metric for all categories
-
-
-
-
-  
-    #   Figure 2: data showing top 5 message categories in the dataset
+    #   Figure 1: data showing Number of Negative-Positive class per category - top 5
     genre_per_category = df.iloc[:,3:].groupby('genre').sum().T
     top_category = genre_per_category.sum(axis=1).sort_values(ascending=False).reset_index()
     top_category.columns = ['categories', 'true_proportion -1']
     top_category['false_proportion -0'] = df.shape[0] - top_category['true_proportion -1']
     top_category['categories'] = top_category['categories'].apply(lambda x: str(x).replace('_', ' '))
     top_classes = top_category.head(5)
+
+    #   Figure 2: performance metric for all categories
 
     #   Figure 3: data visuals
     genre_counts = df.groupby('genre').count()['message']
@@ -78,7 +73,7 @@ def index():
         {
             'data': [
                 Bar(
-                    name = 'Classified in class',
+                    name = 'Positive',
                     y=top_classes['categories'],
                     x=top_classes['true_proportion -1'],
                     orientation = 'h',
@@ -88,7 +83,7 @@ def index():
                     
                 ),
                 Bar(
-                    name = 'Not classified in class',
+                    name = 'Negative',
                     y=top_classes['categories'],
                     x=top_classes['false_proportion -0'],
                     orientation = 'h',
@@ -100,7 +95,7 @@ def index():
             ],
             'layout':{
                 'barmode' : 'stack',
-                'title': 'Top 5 message categories',
+                'title': 'Number of Negative-Positive class per category (top 5)',
                 "xaxis": {
                     'title': 'Number of messages'
                 },
@@ -201,7 +196,7 @@ def dataviz():
     #   Figure 2: performance metric for all categories
     #   Plot is second element (a dictionary type) in the graphs list. 
 
-    #   Figure 3: data showing top 5 message categories in the dataset
+    #   Figure 3: data showing Number of Negative-Positive class per category - top 5
     genre_per_category = df.iloc[:,3:].groupby('genre').sum().T
     top_category = genre_per_category.sum(axis=1).sort_values(ascending=False).reset_index()
     top_category.columns = ['categories', 'true_proportion -1']
@@ -300,7 +295,7 @@ def dataviz():
         {
             'data': [
                 Bar(
-                    name = 'Classified in class',
+                    name = 'Positive',
                     y=top_classes['categories'],
                     x=top_classes['true_proportion -1'],
                     orientation = 'h',
@@ -310,7 +305,7 @@ def dataviz():
                     
                 ),
                 Bar(
-                    name = 'Not classified in class',
+                    name = 'Negative',
                     y=top_classes['categories'],
                     x=top_classes['false_proportion -0'],
                     orientation = 'h',
@@ -321,7 +316,7 @@ def dataviz():
             ],
             'layout':{
                 'barmode' : 'stack',
-                'title': 'Top 5 message categories',
+                'title': 'Number of Negative-Positive class per category (top 5)',
                 "xaxis": {
                     'title': 'Number of messages'
                 },
