@@ -3,6 +3,8 @@ import sys
 import os
 import numpy as np
 import pandas as pd
+import time
+
 
 #   Import natural language processing toolkit downloads
 import nltk
@@ -21,10 +23,15 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.model_selection import train_test_split
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import precision_score, recall_score, accuracy_score
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import classification_report
 
 #   Import joblib to save model
 import pickle
+
+#   Suppress warnings
+import warnings
+warnings.filterwarnings("ignore")
 
 def load_data(database_filename):
     """Function to load cleaned data from app database as dataframe.
@@ -96,10 +103,24 @@ def build_model():
     pipeline = Pipeline([
                     ('vect', CountVectorizer(tokenizer=tokenize)),
                     ('tf_idf', TfidfTransformer()),
-                    ('multi_clf', MultiOutputClassifier(RandomForestClassifier(n_estimators=20)))]                   
+                    ('multi_clf', MultiOutputClassifier(RandomForestClassifier()))]                   
                         )
-    
-    return pipeline
+
+    #   Pipeline Hyperparamenter tuning - remove '#' to include other parameters as you like. 
+    #   Training could take several minutes or hours depending on your device and hyperparameter choice
+    parameters = {
+        'vect__ngram_range': ((1,1), (1,2)),
+        #'vect__max_features': (None, 5000, 10000),
+        #'tf_idf__use_idf': (True, False),
+        #'multi_clf__estimator__min_samples_leaf':[1,2],
+        #'multi_clf__estimator__n_estimators': [10,20,100],
+        #'multi_clf__estimator__max_depth': [None,5,10],
+        #'multi_clf__estimator__min_samples_split': [2,3,5]
+        }
+
+    optimizer = GridSearchCV(pipeline, param_grid=parameters)
+
+    return optimizer
 
 
 def evaluate_model(model, X_test, y_test, category_names):
@@ -118,14 +139,8 @@ def evaluate_model(model, X_test, y_test, category_names):
     #   predict classes for X_test
     prediction = model.predict(X_test)
 
-    #   loop across each category to print out model metrics
-    for i,label in  zip(range (36),category_names):
-        precision = round(precision_score(np.array(y_test)[:,i], prediction[:,i], labels = np.unique(prediction[:,i]), average='weighted'), 3)
-        recall = round(recall_score(np.array(y_test)[:,i], prediction[:,i], labels = np.unique(prediction[:,i]), average='weighted'), 3)
-        accuracy = round(accuracy_score(np.array(y_test)[:,i], prediction[:,i]),3)
-        print(i+1,'-',label.upper())
-        print('Precision: {}, Recall {}, Accuracy: {}'.format(precision, recall, accuracy))
-        print('\n')
+    #   print out model precision, recall and accuracy
+    print(classification_report(y_test, prediction, target_names=category_names))
 
 
 def save_model(model, model_filepath):
@@ -160,10 +175,16 @@ def main():
         
         print('Building model...')
         model = build_model()
-        
+
+        #   training start time
+        start_time = time.time()
+
         print('Training model...')
         model.fit(X_train, y_train)
         
+        # training time taken
+        print("...Training Time: %s seconds ---" % (time.time() - start_time))
+
         print('Evaluating model...')
         evaluate_model(model, X_test, y_test, category_names)
 
