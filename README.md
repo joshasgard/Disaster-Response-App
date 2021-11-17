@@ -14,7 +14,7 @@
    <a href="https://scikit-learn.org/stable/install.html"><img alt="Scikit-Learn" src="https://img.shields.io/badge/sklearn-1.0.1-green" /></a>
    <a href="https://www.sqlite.org/index.html"><img alt="SQLite" src="https://img.shields.io/badge/SQLite-DB-lightgrey" /></a>
 </p>
- <p align="center">If you want to discuss more about the project, then you can reach out via <a href="idowuodesanmi@gmail.com">mail 📩</a>.</p>
+ <p align="center">If you want to discuss more about the project, then you can reach out via <a href="mailto:idowuodesanmi@gmail.com">mail 📩</a>.</p>
 <p align="center"> 
     <a href="/" target="_blank">
     <img src="https://github.com/joshasgard/Disaster-Response-App/blob/master/app/static/img/readme1.png"></img>
@@ -87,7 +87,7 @@ Run the following commands in the project's root directory in your command line 
 ```python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db```
     
 ### Train Model in ML Pipeline
-* To run ML pipeline that trains classifier and saves. The training should take a few minutes (about 5 minutes) depending on your machine. 
+* To run ML pipeline that trains classifier and saves. The training should take a few minutes (or hours) depending on your machine. 
 ```python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl```
 
 ##### Training Result
