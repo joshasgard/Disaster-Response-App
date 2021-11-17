@@ -96,24 +96,56 @@ Loading data...
     DATABASE: data/DisasterResponse.db
 Building model...
 Training model...
+...Training Time: 8112.252200126648 seconds ---
 Evaluating model...
-1 - RELATED
-Precision: 0.788, Recall 0.804, Accuracy: 0.804
-2 - REQUEST
-Precision: 0.885, Recall 0.891, Accuracy: 0.891
-3 - OFFER
-Precision: 0.995, Recall 1.0, Accuracy: 0.995
-4 - AID_RELATED
-Precision: 0.77, Recall 0.77, Accuracy: 0.77
-5 - MEDICAL_HELP
-Precision: 0.913, Recall 0.928, Accuracy: 0.928
-.............
-.............
-36 - DIRECT_REPORT
-Precision: 0.853, Recall 0.862, Accuracy: 0.862
+                        precision    recall  f1-score   support
+
+               related       0.83      0.96      0.89      3992
+               request       0.84      0.49      0.62       888
+                 offer       0.00      0.00      0.00        25
+           aid_related       0.78      0.67      0.72      2145
+          medical_help       0.45      0.04      0.07       398
+      medical_products       0.76      0.07      0.14       254
+     search_and_rescue       0.73      0.08      0.14       139
+              security       0.33      0.01      0.02       107
+              military       0.38      0.02      0.04       160
+           child_alone       0.00      0.00      0.00         0
+                 water       0.85      0.45      0.58       331
+                  food       0.84      0.61      0.71       594
+               shelter       0.79      0.40      0.53       454
+              clothing       1.00      0.08      0.15        97
+                 money       0.60      0.03      0.05       119
+        missing_people       1.00      0.01      0.03        67
+              refugees       0.67      0.04      0.08       192
+                 death       0.85      0.19      0.31       245
+             other_aid       0.62      0.04      0.07       683
+infrastructure_related       0.33      0.00      0.01       350
+             transport       0.64      0.04      0.07       241
+             buildings       0.75      0.16      0.26       246
+           electricity       0.67      0.02      0.04       101
+                 tools       0.00      0.00      0.00        30
+             hospitals       0.00      0.00      0.00        51
+                 shops       0.00      0.00      0.00        29
+           aid_centers       0.00      0.00      0.00        72
+  other_infrastructure       0.00      0.00      0.00       235
+       weather_related       0.87      0.62      0.73      1459
+                floods       0.90      0.32      0.48       422
+                 storm       0.82      0.36      0.50       499
+                  fire       0.00      0.00      0.00        57
+            earthquake       0.92      0.71      0.80       514
+                  cold       0.57      0.04      0.08        90
+         other_weather       0.50      0.03      0.06       278
+         direct_report       0.81      0.36      0.50      1009
+
+             micro avg       0.82      0.51      0.63     16573
+             macro avg       0.56      0.19      0.24     16573
+          weighted avg       0.75      0.51      0.56     16573
+           samples avg       0.68      0.47      0.51     16573
+
 Saving model...
     MODEL: models/classifier.pkl
 Trained model saved!
+
 ```
 
 ### Run web app
@@ -136,14 +168,14 @@ C:\Desktop\Disaster-Response-App\app> python run.py
 # Imbalanced Data ⚖️
 ### Imbalanced Data
 * The dataset is heavily imbalanced for most of the message categories, particularly important ones like `'water', 'fire', 'missing people', 'death', 'hospital', 'electricity', and 'transport'` have very few representation. This means the model performs 
-* Even with **Stratified Sampling** through Grid Search Cross Validation to maintain weights, our model still overfits (i.e. predicts 0 most of the times) for these categories. Hence, we have unreasonably high *weighted* precisions and recalls/accuracies for the classes. 
+* Even with **Stratified Sampling** through Grid Search Cross Validation to maintain weights, our model still overfits (i.e. predicts 0 most of the times) for these categories. Hence, we have unreasonably high or low precisions and recalls for the classes. 
 
 ### Emphasizing Precision and/or Recall
 * Precision, calculated as `TP/(TP + FP)`, is a model metric that punishes classification of messages into a category they do not belong (False Positves, returns 1 instead of 0). The higher the number of misclassifications in that category, the lower the precision value of the model for the category and vice-versa. Recall, calculated as the true positive rate `TP/(TP + FN)`, is a model performance metric that helps to measure the failure of a model to detect messages that belong to a category (False Negatives, returns 0 instead of 1). 
 
 * We have a small positive to negative class ratio for most of the disaster category in the dataset, which supports our interest of detecting relevant messages (positive class) out of a multitude in a disaster. 
 
-* **Hence, for each of the 36 categories, our choice of metric will depend on whether it is more costly for our model to detect some wrong messages (precision) or fail to detect some messages of people that need emergency help (Recall) or both (f1 score). In this case, we can afford to detect some irrelevant messages for most categories, but we can't afford to miss messages of people that need help. Recall is more emphasised**. 
+* **Hence, for each of the 36 categories, our choice of metric depends on whether it is more costly for our model to detect some wrong messages (precision) or fail to detect some messages of people that need emergency help (Recall) or both (f1 score). In this case, we can afford to detect some irrelevant messages for most categories, but we can't afford to miss messages of people that need help. **. 
 
 
 # Licence 📃
