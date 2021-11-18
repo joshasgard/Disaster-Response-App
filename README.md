@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center"> Disaster Response Relief Pipeline 🔥</h1>
-<h3 align="center"> A message classifier for detecting victims of disasters or in emergency situations <br />  built with Supervised Learning and Natural Language Processing! </h3>
+<h3 align="center"> A message classifier for detecting victims of disasters and those in emergency situations. <br />  Built with Supervised Learning and Natural Language Processing! </h3>
 
 <p align="center">
   <a href="https://www.python.org/downloads/release/python-3810/"><img alt="Python" src="https://img.shields.io/badge/python-3.8.10-yellowgreen" /></a>
@@ -38,7 +38,7 @@ A web app for an ML pipeline trained and deployed to help emergency responders d
 * The data cleaning process was done in an ETL pipeline. It involves data extraction from `.csv`, merging, and data transformation by string splitting, type casting, duplicate removal and filtering. The clean data is then loaded into an SQlite DB.
 
 ### ML Pipeline
-* The ML pipeline, with a **Random Forest Classifier (RF)** as estimator, is fitted to the dataset here. 
+* The ML pipeline, with a **Random Forest Classifier (RF)** as estimator (AdaBoost Classifier for the deployed app), is fitted to the dataset here. 
 * Our clean messages serve as the predictor variable while the 36 categories are the MultiOutput target from the pipeline. Hyperparameter Tuning using **Grid Search (with Cross Validation)** was carried out to find the hyperparameters giving the optimum model performance. 
 * During the modelling process, a **Naive Bayes Classifier and an AdaBoost Classifier** were also fitted to the dataset. But there is no significant difference in their performance compared to the RF classifier. Hence, we stuck with the latter. 
 * The pipeline dumps the trained model to a pickle file and returns model **Precision, Recall and Accuracy** as performance metrics. 
@@ -168,15 +168,15 @@ C:\Desktop\Disaster-Response-App\app> python run.py
 
 # Imbalanced Data ⚖️
 ### Imbalanced Data
-* The dataset is heavily imbalanced for most of the message categories, particularly important ones like `'water', 'fire', 'missing people', 'death', 'hospital', 'electricity', and 'transport'` have very few representation. This means the model performs 
-* Even with **Stratified Sampling** through Grid Search Cross Validation to maintain weights, our model still overfits (i.e. predicts 0 most of the times) for these categories. Hence, we have unreasonably high or low precisions and recalls for the classes. 
+* The dataset is heavily imbalanced for most of the message categories, particularly important ones like `'water', 'fire', 'missing people', 'death', 'hospital', 'electricity', and 'transport'` have very few representation. 
+* Even with **Stratified Sampling** through Grid Search Cross Validation to maintain class weights, our model still fails to detect messages for these categories. Hence, we have high or low precisions and/or recalls for the categories.. 
 
 ### Emphasizing Precision and/or Recall
 * Precision, calculated as `TP/(TP + FP)`, is a model metric that punishes classification of messages into a category they do not belong (False Positves, returns 1 instead of 0). The higher the number of misclassifications in that category, the lower the precision value of the model for the category and vice-versa. Recall, calculated as the true positive rate `TP/(TP + FN)`, is a model performance metric that helps to measure the failure of a model to detect messages that belong to a category (False Negatives, returns 0 instead of 1). 
 
 * We have a small positive to negative class ratio for most of the disaster category in the dataset, which supports our interest of detecting relevant messages (positive class) out of a multitude in a disaster. 
 
-* **Hence, for each of the 36 categories, our choice of metric depends on whether it is more costly for our model to detect some wrong messages (precision) or fail to detect some messages of people that need emergency help (Recall) or both (f1 score). In this case, we can afford to detect some irrelevant messages for most categories, but we can't afford to miss messages of people that need help. **. 
+* **Hence, for each of the 36 categories, our choice of metric depends on whether it is more costly for our model to detect some wrong messages (precision) or fail to detect some messages of people that need emergency help (Recall) or both (f1 score). In this case, we can afford to detect some irrelevant messages for most categories, but we can't afford to miss messages of people that need help. **
 
 
 # Licence 📃
