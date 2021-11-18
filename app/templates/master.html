@@ -36,7 +36,7 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
             <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('dataviz') }}">
+                    <a class="nav-link" href="{{ url_for('databoard') }}">
                         Training Data
                     </a>
                 </li>
@@ -55,7 +55,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="https://www.udacity.com/">
-                        Udacity
+                        With Udacity
                     </a>
                 </li>
             </ul>
@@ -84,8 +84,8 @@
             <div class="jumbotron" style="height: 400px">
                 <div class="container">
 
-                    <h1 class="text-center"><a href="/" style = "text-decoration: None; color:inherit">Disaster Response</a></h1>
-                    <p class="text-center">Analyzes message data for disaster response</p>
+                    <h1 class="text-center"><a href="/" style = "text-decoration: None; color:inherit">Emergency Detection Aid</a></h1>
+                    <p class="text-center">Analyzes public messages for emergency response during unrest and disasters</p>
                     <hr />
                 
                     <div class="row">
@@ -138,7 +138,7 @@
         
         {%block content_header%}
         <div class="page-header">
-            <h1 class="text-center">Training Dataset Visualization</h1>
+            <h1 class="text-center">Data Visualizations</h1>
         </div>
         {%endblock%}
 
@@ -150,7 +150,7 @@
 <!--Footer and Copyright-->
 <div id="footer">
     {% block footer %}
-    &copy; Copyright 2021 by <a href="https://linkedin.com/in/idowu-odesanmi">Idowu Odesanmi</a>
+    &copy; Copyright 2021 by <a href="mailto:idowuodesanmi@gmail.com">Idowu Odesanmi</a>
     {% endblock %}
     </div>
 

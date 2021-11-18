@@ -114,25 +114,25 @@ def index():
             'data':[
                 Scatter(
                     name = 'Precision',
-                    x = metrics['CLASSES'],
+                    x = metrics['Target Category'],
                     y = metrics['PRECISION'],
                     mode = 'lines'
                 ),
                 Scatter(
                     name = 'Recall',
-                    x = metrics['CLASSES'],
+                    x = metrics['Target Category'],
                     y = metrics['RECALL'],
                     mode = 'lines'
                 ),
                 Scatter(
-                    name = 'Accuracy',
-                    x = metrics['CLASSES'],
-                    y = metrics['ACCURACY'],
+                    name = 'F1 Score',
+                    x = metrics['Target Category'],
+                    y = metrics['F1'],
                     mode = 'lines'
                 )
             ],
             'layout':{
-                'title': 'RF Model Performance Metrics',
+                'title': 'AdaBoost Model Performance Metrics',
                 "xaxis":{
                     'title': 'Categories',
                     'title_standoff': 100,
@@ -194,8 +194,8 @@ def go():
 
 
 #   web page displays training data visualizations in greater detail
-@app.route('/dataviz')
-def dataviz():
+@app.route('/databoard')
+def databoard():
 
     #   Group data by message genres
     genre_per_category = df.iloc[:,3:].groupby('genre').sum().T
@@ -266,28 +266,28 @@ def dataviz():
 
         },
         {
-            'data':[
+       'data':[
                 Scatter(
                     name = 'Precision',
-                    x = metrics['CLASSES'],
+                    x = metrics['Target Category'],
                     y = metrics['PRECISION'],
                     mode = 'lines'
                 ),
                 Scatter(
                     name = 'Recall',
-                    x = metrics['CLASSES'],
+                    x = metrics['Target Category'],
                     y = metrics['RECALL'],
                     mode = 'lines'
                 ),
                 Scatter(
-                    name = 'Accuracy',
-                    x = metrics['CLASSES'],
-                    y = metrics['ACCURACY'],
+                    name = 'F1 Score',
+                    x = metrics['Target Category'],
+                    y = metrics['F1'],
                     mode = 'lines'
                 )
             ],
             'layout':{
-                'title': 'RF Model Performance Metrics',
+                'title': 'AdaBoost Model Performance Metrics',
                 "xaxis":{
                     'title': 'Categories',
                     'title_standoff': 100,
@@ -363,7 +363,7 @@ def dataviz():
     ids = ["graph-{}".format(i) for i, _ in enumerate(graphs)]
     graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
 
-    return render_template('dataviz.html', ids=ids, graphJSON=graphJSON   )
+    return render_template('databoard.html', ids=ids, graphJSON=graphJSON   )
 
 
 def main():
