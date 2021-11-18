@@ -59,7 +59,8 @@ A web app for an ML pipeline trained and deployed to help emergency responders d
 | | | - - # all images files (.jpg, .png, and .svg)
 | - template
 | |- master.html  # main page of web app
-| |- go.html  # classification result page of web app
+| |- databoard.html # data visualizations board
+| |- results.html  # classification result page of web app
 |- run.py  # Flask file that runs app
 
 - data
