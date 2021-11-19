@@ -16,7 +16,7 @@
 </p>
  <p align="center">If you want to discuss more about the project, then you can reach out via <a href="mailto:idowuodesanmi@gmail.com">mail 📩</a>.</p>
 <p align="center"> 
-    <a href="/" target="_blank">
+    <a href="http://detect-aid-messages.herokuapp.com/" target="_blank">
     <img src="https://github.com/joshasgard/Disaster-Response-App/blob/master/app/static/img/readme1.png"></img>
   </a>
   </p>
@@ -47,7 +47,7 @@ A web app for an ML pipeline trained and deployed to help emergency responders d
 * The web app allows a user to input a single message as a sentence and the trained model returns the disaster categories the message falls with a few relevant agencies to call upon.
 
 ### Deployment
-* To Heroku. *Live link will be provided later*
+* View deployed app <a href = "http://detect-aid-messages.herokuapp.com/">here</a>
 
 # File Description 📂
 
