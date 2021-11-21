@@ -43,19 +43,19 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="https://github.com/joshasgard">
-                        <img src="../static/img/githublogo.png" alt="Github" class="d-inline-block align-top"> 
+                        
                         Github
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="https://linkedin.com/in/idowu-odesanmi"> 
-                        <img src="../static/img/linkedin2logo.png" alt="linkedin" class="d-inline-block align-top">
+                        
                         LinkedIn
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="https://www.udacity.com/">
-                        With Udacity
+                      Udacity
                     </a>
                 </li>
             </ul>
@@ -69,7 +69,7 @@
 </nav>
 {% block visuals %}
     <!--Carousel-->  
-<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+<div id="carouselExampleIndicators" class="carousel slide" data-interval="false" data-ride="carousel" data-pause="hover">
     <ol class="carousel-indicators">
       <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
       <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
@@ -85,13 +85,13 @@
                 <div class="container">
 
                     <h1 class="text-center"><a href="/" style = "text-decoration: None; color:inherit">Emergency Detection Aid</a></h1>
-                    <p class="text-center">Analyzes public messages for emergency response during unrest and disasters</p>
+                    <p class="text-center">Analyzes your message for emergency response during crisis and disasters</p>
                     <hr />
                 
                     <div class="row">
                         <div class="col-lg-12 form-group-lg">
                             <form action="/go" method="get">
-                                <input type="text" class="form-control form-control-lg" name="query" placeholder="Enter a message to classify">
+                                <input type="text" class="form-control form-control-lg" name="query" placeholder="Enter an emergency message here to test model and find concerned agency">
                                 <div class="col-lg-offset-5 text-center" style= "margin-top: 20px;">
                                     <button type="submit" class="btn btn-lg btn-success">Classify Message</button>
                                 </div>
